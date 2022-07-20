@@ -36,29 +36,32 @@ class priorityqueue{
         }
     }
 
-    //Remove minimum from the priority queue// Basically this is Heap Sort
+    //Remove minimum from the priority queue
     int removemin(){
-        if(isempty()) return 0; //Priority queue is empty
+        if(isempty()) return 0;
         int ans=pq[0];
-        //swap(pq[0],pq[pq.size()-1]);
-        pq[0]=pq[pq.size()-1];
+        swap(pq[0],pq[pq.size()-1]);
         pq.pop_back();
         int parentindex=0;
-        int lci=2*parentindex+1;
-        int rci=2*parentindex+2;
-        while(lci<pq.size()){
-            int minindex=parentindex;
-            if(pq[minindex]>pq[lci]) minindex=lci;
-            if(rci<pq.size() && pq[minindex]>pq[rci])   minindex=rci;
-            if(parentindex==minindex) break;
+        
+        while(parentindex<pq.size()-2){
+            int lci=2*parentindex+1;
+            int rci=2*parentindex+2;
+            int minindex;
+            if(lci<=pq.size()-1 && rci<=pq.size()-1){
+                if(pq[parentindex]>pq[lci]) minindex=lci;
+                else minindex=parentindex;
+                if(pq[rci]<pq[minindex]) minindex=rci;
+            }
+            else if(lci<=pq.size()-1){
+                if(pq[parentindex]>pq[lci])    minindex=lci;
+                else minindex=parentindex;
+            }
             swap(pq[parentindex],pq[minindex]);
             parentindex=minindex; 
-            lci=2*parentindex+1;
-            rci=2*parentindex+2;
         }
         return ans;
     }
-
 
     //Function to print the priority queue
     void printpq(){
@@ -72,16 +75,15 @@ class priorityqueue{
 };
 int main(){
     priorityqueue p;
-    p.insert(100);
     p.insert(10);
-    p.insert(15);
-    p.insert(4);
-    p.insert(17);
-    p.insert(21);
-    p.insert(67);
+    p.insert(20);
+    p.insert(100);
+    p.insert(30);
+    p.insert(40);
+
+    //p.insert(50);
     p.printpq();
-    while(!p.isempty()){
-        cout<<p.removemin()<<" ";
-    }
+    cout<<p.removemin()<<endl;
+    p.printpq();
     return 0;
 }
